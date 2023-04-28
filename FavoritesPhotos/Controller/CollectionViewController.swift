@@ -6,83 +6,96 @@
 //
 
 import UIKit
-
-private let reuseIdentifier = "Cell"
+import Photos
 
 class CollectionViewController: UICollectionViewController {
 
+    private var favouriteAlbum = PHFetchResult<PHAssetCollection>()
+    private var favPhotos: [UIImage] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
-        // Do any additional setup after loading the view.
+        
+        setCollectionViewLayout()
+        fillFavouritePhotos()
+        
     }
+    
+    func fillFavouritePhotos() {
+        
+        favouriteAlbum = PHAssetCollection.fetchAssetCollections(
+            with: .smartAlbum,
+            subtype: .smartAlbumFavorites,
+            options: nil)
+        
+        let manager = PHImageManager.default()
+        
+        var coverAsset: PHAsset?
+        let collection = favouriteAlbum[0]
+        let fetchedAssets = PHAsset.fetchAssets(in: collection, options: nil)
+        
+        for curIndex in 0...fetchedAssets.count - 1 {
+       
+            coverAsset = fetchedAssets.object(at: curIndex)
+            
+            manager.requestImage(for: coverAsset!, targetSize: CGSize(width: 128, height: 128), contentMode: .aspectFill, options: requestOption()) { (image, error) in
+                
+                guard let image = image else {
+                    return
+                }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
+                self.favPhotos.append(image)
+                
+            }
+            
+        }
+        
     }
-    */
+    
+    func setCollectionViewLayout() {
+        
+        let layout = UICollectionViewFlowLayout()
 
-    // MARK: UICollectionViewDataSource
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
+        
+        let displayWidth: CGFloat = self.view.frame.width
+        layout.itemSize = CGSize(width: (displayWidth / 3.5), height: (displayWidth / 3.5))
+        
+        collectionView.setCollectionViewLayout(layout, animated: true)
+        
+    }
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+        return favPhotos.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-    
-        // Configure the cell
+       
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.reuseIdentifier, for: indexPath) as? CollectionViewCell else {
+            fatalError("Unable to dequeue CollectionViewCell")
+        }
+        
+        cell.updateImage(favPhotos[indexPath.row])
     
         return cell
+        
     }
 
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
+    private func requestOption() -> PHImageRequestOptions {
+        
+        let requestOptions = PHImageRequestOptions()
+        requestOptions.isSynchronous = true
+        requestOptions.deliveryMode = .highQualityFormat
+        
+        return requestOptions
+        
     }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
     
-    }
-    */
-
 }

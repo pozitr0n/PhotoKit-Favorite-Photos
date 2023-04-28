@@ -12,7 +12,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="FavoritesPhotos" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="FavoritesPhotos" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -22,7 +22,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="icon_open_photos"/>
                                 <connections>
-                                    <segue destination="4r3-yI-YvD" kind="show" id="Cea-Jb-Ee5"/>
+                                    <action selector="openFavoutites:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fBg-5r-J7L"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Open your favourite photos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wK4-Xu-QwS">
@@ -42,15 +42,18 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="OE8-lX-xsz"/>
+                    <connections>
+                        <outlet property="mainButton" destination="9MP-mt-Qex" id="8UQ-fi-awg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="963" y="4"/>
+            <point key="canvasLocation" x="865" y="4"/>
         </scene>
         <!--Collection View Controller-->
         <scene sceneID="PmW-gU-3jh">
             <objects>
-                <collectionViewController id="4r3-yI-YvD" customClass="CollectionViewController" customModule="FavoritesPhotos" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="CollectionViewController" id="4r3-yI-YvD" customClass="CollectionViewController" customModule="FavoritesPhotos" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="T7c-Sm-t0g">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -98,7 +101,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gsh-A8-b5d" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1958" y="4"/>
+            <point key="canvasLocation" x="1676" y="4"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Thu-tL-heI">
